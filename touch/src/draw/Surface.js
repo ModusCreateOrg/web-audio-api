@@ -321,7 +321,7 @@ Ext.define('Ext.draw.Surface', {
             if (!items[i]) {
                 continue;
             }
-            sprite = me.prepareItems(args[0])[0];
+            sprite = me.prepareItems(args[0])[i];
             groups = sprite.group;
             if (groups.length) {
                 for (i = 0, ln = groups.length; i < ln; i++) {
