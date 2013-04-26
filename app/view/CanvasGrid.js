@@ -9,7 +9,7 @@ Ext.define('TNR.view.CanvasGrid', {
     xtype             : 'canvasgrid',
     requires          : ['Ext.util.HashMap'],
     config            : {
-        html  : '<canvas width="800px" height="800px" id="canvas-grid"></canvas>',
+        html  : '<canvas width="720px" height="720px" id="canvas-grid"></canvas>',
         stage : null,
         cells : null
     },
@@ -49,8 +49,8 @@ Ext.define('TNR.view.CanvasGrid', {
                     y : y
                 };
                 shape.physicalPos = {
-                    x : (5 + (width * x * 1.75)),
-                    y : (5 + (height * y * 1.75))
+                    x : (10 + (width * x * 1.75)),
+                    y : (10 + (height * y * 1.75))
                 };
                 shape.graphics.beginFill(fillStyle).drawRoundRect(shape.physicalPos.x, shape.physicalPos.y, 35, 35, 10);
                 shape.onPress = Ext.bind(me.onCellTap, me);
@@ -104,7 +104,7 @@ Ext.define('TNR.view.CanvasGrid', {
                     stage.addChild(currentBar);
                 }
 
-                currentBar.graphics.clear().setStrokeStyle(1).beginStroke('#f00f00').drawRoundRect(currentCell.physicalPos.x - 5, 0, 45, 705, 10);
+                currentBar.graphics.clear().setStrokeStyle(2).beginStroke('#00465c').drawRoundRect(currentCell.physicalPos.x - 5, 5, 45, 705, 10);
                 stage.update();
 
                 step++;
