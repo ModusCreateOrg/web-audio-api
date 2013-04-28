@@ -17,9 +17,23 @@ Ext.define('TNR.controller.Audio', {
             'canvasgrid' : {
                 'playCell' : 'onPlayCell'
             }
-        }
+        },
+        audioContext : null,
+        oscillator   : null
     },
-    onPlayCell : function (cell) {
+    onPlayCell   : function (cell) {
         console.log('playing cell', cell);
+        this.generateTone(cell);
+    },
+    generateTone : function(e) {
+        var oscillator = this.getOscillator();
+        oscillator.connect(this.getAudioContext().destination); // Connect to speakers
+        oscillator.start(0); // Start generating sound immediately
+
+        oscillator.frequency.value = e.physicalPos.x + e.physicalPos.y; // in hertz
+    },
+    init         : function() {
+        this.setAudioContext(new webkitAudioContext());
+        this.setOscillator(this.getAudioContext().createOscillator());
     }
-})
+});

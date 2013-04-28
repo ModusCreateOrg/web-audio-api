@@ -55,6 +55,15 @@ Ext.application({
     },
 
     launch : function () {
+        // check for web audio support
+        if ('AudioContext' in window) {
+            // no op
+        } else if ('webkitAudioContext' in window) {
+            // no op
+        } else {
+            alert('Your browser does not yet support the Web Audio API');
+            return;
+        }
         // Destroy the #appLoadingIndicator element
         Ext.fly('appLoadingIndicator').destroy();
     },
