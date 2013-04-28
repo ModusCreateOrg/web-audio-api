@@ -1,2 +1,5 @@
 .DS_Store
 resources/sass/.sass-cache/
+.idea
+node_modules/
+npm-debug.log
