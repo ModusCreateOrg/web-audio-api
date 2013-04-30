@@ -9,7 +9,7 @@ Ext.define('TNR.view.CanvasGrid', {
     xtype             : 'canvasgrid',
     requires          : ['Ext.util.HashMap'],
     config            : {
-        html  : '<canvas width="720px" height="720px" id="canvas-grid"></canvas>',
+        html  : '<canvas width="720px" height="720px" id="canvas-grid"></canvas><div class="start">Start Recording</div><div class="stop">Stop Recording</div>',
         bpm   : 120,
         stage : null,
         cells : null
@@ -20,7 +20,23 @@ Ext.define('TNR.view.CanvasGrid', {
             painted : me.renderGrid,
             scope   : me
         });
+        me.element.on({
+            tap   : me.onTap,
+            scope : me
+        });
         me.callParent();
+    },
+    onTap             : function (evtObj) {
+        var startRecording = evtObj.getTarget(".start"),
+            stopRecording  = evtObj.getTarget(".stop"),
+            eventName;
+        if(startRecording) {
+            eventName = 'startRecording';
+        } else if(stopRecording) {
+            eventName = 'stopRecording';
+        }
+
+        eventName && this.fireEvent(eventName);
     },
     renderGrid        : function () {
         var me           = this,

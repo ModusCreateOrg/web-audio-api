@@ -5,36 +5,49 @@
  * Time: 1:15 PM
  */
 Ext.define('TNR.controller.Audio', {
-    extend     : 'Ext.app.Controller',
-    config     : {
-        views   : [
+    extend           : 'Ext.app.Controller',
+    config           : {
+        views        : [
             'CanvasGrid'
         ],
-        refs    : {
+        refs         : {
             canvasGrid : 'canvasgrid'
         },
-        control : {
+        control      : {
             'canvasgrid' : {
-                'playCell' : 'onPlayCell'
+                'playCell'       : 'onPlayCell',
+                'startRecording' : 'onStartRecording',
+                'stopRecording'  : 'onStopRecording'
             }
         },
-        audioContext : null
+        audioContext : null,
+        gainNode     : null,
+        recorder     : null
     },
-    onPlayCell   : function (cell) {
-        console.log('playing cell', cell);
+    init             : function () {
+        var me           = this,
+            audioContext = new webkitAudioContext(),
+            gainNode     = audioContext.createGainNode();
+
+        gainNode.connect(audioContext.destination);
+        gainNode.gain.value = 0.5;
+
+        me.setAudioContext(audioContext);
+        me.setGainNode(gainNode);
+    },
+    onPlayCell       : function (cell) {
         this.generateTone(cell);
     },
-    generateTone : function(e) {
+    generateTone     : function (e) {
         var me           = this,
             audioContext = me.getAudioContext(),
             oscillator   = audioContext.createOscillator(),
             fps          = (me.getCanvasGrid().getBpm() / 60);
 
-        console.log(oscillator);
-        oscillator.connect(audioContext.destination); // Connect to speakers
+        oscillator.connect(me.getGainNode()); // Connect to speakers
 
         oscillator.start(0); // Start generating sound immediately
-        oscillator.frequency.value = ((e.physicalPos.x + e.physicalPos.y)/2); // in hertz
+        oscillator.frequency.value = ((e.physicalPos.x + e.physicalPos.y) / 2); // in hertz
         function stopNote() {
             setTimeout(function () {
                 requestAnimationFrame(stopNote);
@@ -42,11 +55,29 @@ Ext.define('TNR.controller.Audio', {
             }, 1000 / fps);
         };
         stopNote();
-//        setTimeout(function() {
-//            oscillator.disconnect();
-//        }, 500);
     },
-    init         : function() {
-        this.setAudioContext(new webkitAudioContext());
+    onStartRecording : function () {
+        var me       = this,
+            recorder = new Recorder(me.getGainNode(), {
+                workerPath : 'lib/recorderjs/recorderWorker.js'
+            });
+        console.log('start recording');
+        recorder.record();
+        me.setRecorder(recorder);
+
+    },
+    onRecordAudioProcess : function(e) {
+
+//        console.log(e.inputBuffer.getChannelData(0));
+    },
+    onStopRecording  : function () {
+        console.log('stop');
+        var recorder = this.getRecorder();
+
+        recorder.stop();
+
+        recorder.exportWAV(function(buffer) {
+            Recorder.forceDownload(buffer);
+        });
     }
 });

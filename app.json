@@ -48,6 +48,14 @@
             'remote' : true
         },
         {
+            'path' : 'lib/recorderjs/recorder.js',
+            'remote' : true
+        },
+        {
+            'path' : 'lib/recorderjs/recorderWorker.js',
+            'remote' : true
+        },
+        {
             "path": "app.js",
             "bundle": true,  /* Indicates that all class dependencies are concatenated into this file when build */
             "update": "delta"
