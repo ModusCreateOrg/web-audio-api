@@ -10,6 +10,7 @@ Ext.define('TNR.view.CanvasGrid', {
     requires          : ['Ext.util.HashMap'],
     config            : {
         html  : '<canvas width="720px" height="720px" id="canvas-grid"></canvas>',
+        bpm   : 120,
         stage : null,
         cells : null
     },
@@ -75,7 +76,7 @@ Ext.define('TNR.view.CanvasGrid', {
         var me         = this,
             stage      = me.getStage(),
             cells      = me.getCells(),
-            fps        = 2,
+            fps        = (me.getBpm() / 60),
             step       = 0,
             cellsIndex = 16,
             currentBar,

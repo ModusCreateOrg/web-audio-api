@@ -25,15 +25,26 @@ Ext.define('TNR.controller.Audio', {
         this.generateTone(cell);
     },
     generateTone : function(e) {
-        var oscillator = this.getAudioContext().createOscillator();
+        var me           = this,
+            audioContext = me.getAudioContext(),
+            oscillator   = audioContext.createOscillator(),
+            fps          = (me.getCanvasGrid().getBpm() / 60);
+
         console.log(oscillator);
-        oscillator.connect(this.getAudioContext().destination); // Connect to speakers
+        oscillator.connect(audioContext.destination); // Connect to speakers
 
         oscillator.start(0); // Start generating sound immediately
         oscillator.frequency.value = ((e.physicalPos.x + e.physicalPos.y)/2); // in hertz
-        setTimeout(function() {
-            oscillator.disconnect();
-        }, 500);
+        function stopNote() {
+            setTimeout(function () {
+                requestAnimationFrame(stopNote);
+                oscillator.disconnect();
+            }, 1000 / fps);
+        };
+        stopNote();
+//        setTimeout(function() {
+//            oscillator.disconnect();
+//        }, 500);
     },
     init         : function() {
         this.setAudioContext(new webkitAudioContext());
