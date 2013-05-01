@@ -5,49 +5,74 @@
  * Time: 10:12 AM
  */
 Ext.define('TNR.view.CanvasGrid', {
-    extend            : 'Ext.Component',
-    xtype             : 'canvasgrid',
-    requires          : ['Ext.util.HashMap'],
-    config            : {
-        html  : '<canvas width="720px" height="720px" id="canvas-grid"></canvas><div class="start">Start Recording</div><div class="stop">Stop Recording</div>',
-        bpm   : 120,
-        stage : null,
-        cells : null
+    extend           :'Ext.Component',
+    xtype            :'canvasgrid',
+    cls              :'canvas-grid',
+    requires         :['Ext.util.HashMap'],
+    config           :{
+        html :'<div class="top-nav"><div class="label">Player:</div> <div class="button" data-event="reset">Reset</div> <div class="label">Recording: </div><div class="button start" data-event="record">Start</div> <div class="clear"></div></div><canvas width="720px" height="720px" id="canvas-grid"></canvas>',
+        bpm  :120,
+        stage:null,
+        cells:null
     },
-    initialize        : function () {
+    initialize       :function () {
         var me = this;
         me.on({
-            painted : me.renderGrid,
-            scope   : me
+            painted:me.renderGrid,
+            scope  :me
         });
         me.element.on({
-            tap   : me.onTap,
-            scope : me
+            tap       :me.onTap,
+            touchstart:me.onTouchStart,
+            touchend  :me.onTouchEnd,
+            scope     :me
         });
         me.callParent();
     },
-    onTap             : function (evtObj) {
-        var startRecording = evtObj.getTarget(".start"),
-            stopRecording  = evtObj.getTarget(".stop"),
+    onTap            :function (evtObj) {
+        var button = evtObj.getTarget(".button"),
+            btn    = evtObj.getTarget('.button', null, true),
             eventName;
-        if(startRecording) {
-            eventName = 'startRecording';
-        } else if(stopRecording) {
-            eventName = 'stopRecording';
+        if (button) {
+            eventName = button.dataset ? button.dataset.event : button.getAttribute('data-event');
+            if (eventName == 'record') {
+                if (btn.hasCls('start')) {
+                    Ext.fly(button).removeCls("start");
+                    Ext.fly(button).addCls("stop");
+                    btn.setHtml('Stop');
+                    eventName = 'startRecording';
+                } else {
+                    Ext.fly(button).removeCls("stop");
+                    Ext.fly(button).addCls("start");
+                    btn.setHtml('Start');
+                    eventName = 'stopRecording';
+                }
+            }
+            eventName && this.fireEvent(eventName);
         }
-
-        eventName && this.fireEvent(eventName);
     },
-    renderGrid        : function () {
-        var me           = this,
-            canvas       = me.element.down('#canvas-grid').dom,
-            stage        = new createjs.Stage(canvas),
-            length       = 16,
-            width        = 25,
-            height       = 25,
-            fillStyle    = '#989a95',
+    onTouchStart     : function (evtObj) {
+        var btn = evtObj.getTarget('.button', null, true);
+        if (btn && !btn.hasCls("pressed")) {
+            Ext.fly(btn).addCls("pressed");
+        }
+    },
+    onTouchEnd       : function (evtObj) {
+        var btn = evtObj.getTarget('.button');
+        if (btn) {
+            Ext.fly(btn).removeCls("pressed");
+        }
+    },
+    renderGrid       :function () {
+        var me = this,
+            canvas = me.element.down('#canvas-grid').dom,
+            stage = new createjs.Stage(canvas),
+            length = 16,
+            width = 25,
+            height = 25,
+            fillStyle = '#989a95',
             pressedStyle = '#ffffff',
-            cells        = Ext.create('Ext.util.HashMap'),
+            cells = Ext.create('Ext.util.HashMap'),
             shape,
             x,
             y;
@@ -62,12 +87,12 @@ Ext.define('TNR.view.CanvasGrid', {
                 shape.pressedStyle = pressedStyle;
                 shape.defaultStyle = fillStyle;
                 shape.logicalPos = {
-                    x : x,
-                    y : y
+                    x:x,
+                    y:y
                 };
                 shape.physicalPos = {
-                    x : (10 + (width * x * 1.75)),
-                    y : (10 + (height * y * 1.75))
+                    x:(10 + (width * x * 1.75)),
+                    y:(10 + (height * y * 1.75))
                 };
                 shape.graphics.beginFill(fillStyle).drawRoundRect(shape.physicalPos.x, shape.physicalPos.y, 35, 35, 10);
                 shape.onPress = Ext.bind(me.onCellTap, me);
@@ -79,21 +104,21 @@ Ext.define('TNR.view.CanvasGrid', {
         stage.update();
         me.startTicker();
     },
-    onCellTap         : function (e) {
+    onCellTap        :function (e) {
         this.toggleCellPressed(e.target);
     },
-    toggleCellPressed : function (shape) {
+    toggleCellPressed:function (shape) {
         var fillStyle = (shape.pressed) ? shape.defaultStyle : shape.pressedStyle;
         shape.graphics.clear().beginFill(fillStyle).drawRoundRect(shape.physicalPos.x, shape.physicalPos.y, 35, 35, 10).endFill();
         shape.pressed = !shape.pressed;
         this.getStage().update();
     },
-    startTicker       : function () {
-        var me         = this,
-            stage      = me.getStage(),
-            cells      = me.getCells(),
-            fps        = (me.getBpm() / 60),
-            step       = 0,
+    startTicker      :function () {
+        var me = this,
+            stage = me.getStage(),
+            cells = me.getCells(),
+            fps = (me.getBpm() / 60),
+            step = 0,
             cellsIndex = 16,
             currentBar,
             stepCells,
