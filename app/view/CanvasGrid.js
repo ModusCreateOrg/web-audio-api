@@ -10,7 +10,7 @@ Ext.define('TNR.view.CanvasGrid', {
     cls              :'canvas-grid',
     requires         :['Ext.util.HashMap'],
     config           :{
-        html :'<div class="top-nav"><div class="label">Player:</div> <div class="button" data-event="reset">Reset</div> <div class="label">Recording: </div><div class="button start" data-event="record">Start</div> <div class="clear"></div></div><canvas width="720px" height="720px" id="canvas-grid"></canvas>',
+        html :'<div class="top-nav"><div class="label">Player:</div> <div class="button" data-event="resetPlayer">Reset</div> <div class="label">Recording: </div><div class="button start" data-event="record">Start</div> <div class="clear"></div></div><canvas width="720px" height="720px" id="canvas-grid"></canvas>',
         bpm  :120,
         stage:null,
         cells:null
@@ -103,6 +103,22 @@ Ext.define('TNR.view.CanvasGrid', {
         me.setCells(cells);
         stage.update();
         me.startTicker();
+    },
+    resetGrid: function() {
+        var stage = this.getStage(),
+            shapes = stage.children,
+            shape,
+            i = 0;
+        for(;i < shapes.length; i++) {
+            shape = shapes[i];
+            if (shape.pressed = true) {
+                shape.pressed = false;
+                if (shape.physicalPos) {
+                    shape.graphics.clear().beginFill(shape.defaultStyle).drawRoundRect(shape.physicalPos.x, shape.physicalPos.y, 35, 35, 10).endFill();
+                }
+            }
+        }
+        stage.update();
     },
     onCellTap        :function (e) {
         this.toggleCellPressed(e.target);

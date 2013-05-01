@@ -5,29 +5,30 @@
  * Time: 1:15 PM
  */
 Ext.define('TNR.controller.Audio', {
-    extend           : 'Ext.app.Controller',
-    config           : {
-        views        : [
+    extend              :'Ext.app.Controller',
+    config              :{
+        views       :[
             'CanvasGrid'
         ],
-        refs         : {
-            canvasGrid : 'canvasgrid'
+        refs        :{
+            canvasGrid:'canvasgrid'
         },
-        control      : {
-            'canvasgrid' : {
-                'playCell'       : 'onPlayCell',
-                'startRecording' : 'onStartRecording',
-                'stopRecording'  : 'onStopRecording'
+        control     :{
+            'canvasgrid':{
+                'playCell'      :'onPlayCell',
+                'startRecording':'onStartRecording',
+                'stopRecording' :'onStopRecording',
+                'resetPlayer'   :'onResetPlayer'
             }
         },
-        audioContext : null,
-        gainNode     : null,
-        recorder     : null
+        audioContext:null,
+        gainNode    :null,
+        recorder    :null
     },
-    init             : function () {
-        var me           = this,
+    init                :function () {
+        var me = this,
             audioContext = new webkitAudioContext(),
-            gainNode     = audioContext.createGainNode();
+            gainNode = audioContext.createGainNode();
 
         gainNode.connect(audioContext.destination);
         gainNode.gain.value = 0.5;
@@ -35,14 +36,18 @@ Ext.define('TNR.controller.Audio', {
         me.setAudioContext(audioContext);
         me.setGainNode(gainNode);
     },
-    onPlayCell       : function (cell) {
+    onResetPlayer       :function () {
+       var canvas = Ext.ComponentQuery.query('canvasgrid')[0];
+        canvas.resetGrid();
+    },
+    onPlayCell          :function (cell) {
         this.generateTone(cell);
     },
-    generateTone     : function (e) {
-        var me           = this,
+    generateTone        :function (e) {
+        var me = this,
             audioContext = me.getAudioContext(),
-            oscillator   = audioContext.createOscillator(),
-            fps          = (me.getCanvasGrid().getBpm() / 60);
+            oscillator = audioContext.createOscillator(),
+            fps = (me.getCanvasGrid().getBpm() / 60);
 
         oscillator.connect(me.getGainNode()); // Connect to speakers
 
@@ -56,27 +61,27 @@ Ext.define('TNR.controller.Audio', {
         };
         stopNote();
     },
-    onStartRecording : function () {
-        var me       = this,
+    onStartRecording    :function () {
+        var me = this,
             recorder = new Recorder(me.getGainNode(), {
-                workerPath : 'lib/recorderjs/recorderWorker.js'
+                workerPath:'lib/recorderjs/recorderWorker.js'
             });
         console.log('start recording');
         recorder.record();
         me.setRecorder(recorder);
 
     },
-    onRecordAudioProcess : function(e) {
+    onRecordAudioProcess:function (e) {
 
 //        console.log(e.inputBuffer.getChannelData(0));
     },
-    onStopRecording  : function () {
+    onStopRecording     :function () {
         console.log('stop');
         var recorder = this.getRecorder();
 
         recorder.stop();
 
-        recorder.exportWAV(function(buffer) {
+        recorder.exportWAV(function (buffer) {
             Recorder.forceDownload(buffer);
         });
     }
