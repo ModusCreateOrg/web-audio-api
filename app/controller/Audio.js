@@ -47,12 +47,14 @@ Ext.define('TNR.controller.Audio', {
         var me = this,
             audioContext = me.getAudioContext(),
             oscillator = audioContext.createOscillator(),
-            fps = (me.getCanvasGrid().getBpm() / 60);
+            fps = (me.getCanvasGrid().getBpm() / 60),
+            canvas = Ext.ComponentQuery.query('canvasgrid')[0],
+            freqD = canvas.getFrequency() ? canvas.getFrequency() : 2;
 
         oscillator.connect(me.getGainNode()); // Connect to speakers
 
         oscillator.start(0); // Start generating sound immediately
-        oscillator.frequency.value = ((e.physicalPos.x + e.physicalPos.y) / 2); // in hertz
+        oscillator.frequency.value = ((e.physicalPos.x + e.physicalPos.y) / freqD); // in hertz
         function stopNote() {
             setTimeout(function () {
                 requestAnimationFrame(stopNote);

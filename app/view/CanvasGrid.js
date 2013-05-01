@@ -5,12 +5,26 @@
  * Time: 10:12 AM
  */
 Ext.define('TNR.view.CanvasGrid', {
-    extend           :'Ext.Component',
+    extend           :'Ext.Panel',
     xtype            :'canvasgrid',
     cls              :'canvas-grid',
     requires         :['Ext.util.HashMap'],
+    frequencyDivide  : 2,
     config           :{
-        html :'<div class="top-nav"><div class="label">Player:</div> <div class="button" data-event="resetPlayer">Reset</div> <div class="label">Recording: </div><div class="button start" data-event="record">Start</div> <div class="clear"></div></div><canvas width="720px" height="720px" id="canvas-grid"></canvas>',
+        html : ''.concat(
+            '<div class="top-nav">',
+                '<div class="label">Player:</div> <div class="button" data-event="resetPlayer">Reset</div> ',
+                '<div class="label">Recording: </div><div class="button start" data-event="record">Start</div> ',
+                '<div id="frequency" class="frequency"> <div class="labelf">Frequency Divider: </div>',
+                    '<div class="button freq" data-event="frequency" data-value="1">1</div> ',
+                    '<div class="button freq selected" data-event="frequency" data-value="2">2</div> ',
+                    '<div class="button freq" data-event="frequency" data-value="3">3</div> ',
+                    '<div class="button freq" data-event="frequency" data-value="4">4</div>',
+                 '</div>',
+                '<div class="clear"></div>',
+            '</div>',
+            '<canvas width="720px" height="720px" id="canvas-grid"></canvas>'
+        ),
         bpm  :120,
         stage:null,
         cells:null
@@ -32,7 +46,10 @@ Ext.define('TNR.view.CanvasGrid', {
     onTap            :function (evtObj) {
         var button = evtObj.getTarget(".button"),
             btn    = evtObj.getTarget('.button', null, true),
-            eventName;
+            eventName,
+            value,
+            parent,
+            elements;
         if (button) {
             eventName = button.dataset ? button.dataset.event : button.getAttribute('data-event');
             if (eventName == 'record') {
@@ -47,6 +64,17 @@ Ext.define('TNR.view.CanvasGrid', {
                     btn.setHtml('Start');
                     eventName = 'stopRecording';
                 }
+            }
+            if (eventName == 'frequency') {
+                value = button.dataset ? button.dataset.value : button.getAttribute('data-value');
+                this.frequencyDivide = value;
+                parent = Ext.get('frequency');
+
+                elements = parent.query("div.selected");
+                elements.forEach(function (el) {
+                    Ext.fly(el).removeCls('selected');
+                });
+                Ext.fly(button).addCls("selected");
             }
             eventName && this.fireEvent(eventName);
         }
@@ -119,6 +147,9 @@ Ext.define('TNR.view.CanvasGrid', {
             }
         }
         stage.update();
+    },
+    getFrequency : function() {
+         return this.frequencyDivide;
     },
     onCellTap        :function (e) {
         this.toggleCellPressed(e.target);

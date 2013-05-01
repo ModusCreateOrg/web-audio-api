@@ -15,16 +15,26 @@
       &.pressed {
         background : #ccc;
       }
-      &.stop {
+      &.stop, &.selected {
         background : #f00;
       }
     }
     .label {
       float        : left;
       margin-right : 5px;
-      margin-left  : 50px;
+      margin-left  : 5px;
       color        : #333;
       font-weight  : bold;
+    }
+    .frequency {
+      float: right;
+      margin-right: 10px;
+      .labelf {
+        color        : #333;
+        font-weight  : bold;
+        float: none;
+        margin-bottom: 5px;
+      }
     }
   }
 }
