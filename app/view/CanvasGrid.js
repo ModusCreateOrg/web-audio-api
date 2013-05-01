@@ -141,7 +141,7 @@ Ext.define('TNR.view.CanvasGrid', {
     resetGrid            : function () {
         var stage        = this.getStage(),
             shapes       = stage.children,
-            shapesLength = shape.length,
+            shapesLength = shapes.length,
             shape,
             i = 0;
 
