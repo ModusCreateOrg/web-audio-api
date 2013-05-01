@@ -1,40 +1,65 @@
 .canvas-grid {
-  width  : 720px;
-  margin : 0 auto;
-  .top-nav {
-    background    : #fff;
-    border-radius : 0 0 20px 20px;
-    padding       : 15px;
-    .button {
-      margin-right  : 20px;
-      float         : left;
-      background    : #123;
-      color         : #fff;
-      border-radius : 10px;
-      padding       : 2px 10px;
-      &.pressed {
-        background : #ccc;
+
+  .outer {
+
+    display: -webkit-box;
+    width: 960px;
+    height: 840px;
+    //margin: 20px auto;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 20px;
+    border-radius: 2em;
+    background: -webkit-radial-gradient(center, circle cover, rgba(181, 189, 200, 1) 0%, rgba(130, 140, 149, 1) 20%, rgba(40, 52, 59, 1) 100%); /* Chrome10+,Safari5.1+ */
+    -webkit-box-align: stretch;
+    .controls {
+      display: -webkit-box;
+      -webkit-box-orient: vertical;
+      &.left {
+        width: 120px;
+        -webkit-box-pack: start;
+        -webkit-box-align: stretch;
+        text-align: center;
+        .reset {
+          -webkit-box-flex: 1;
+        }
+        .bpm {
+          -webkit-box-flex: 2;
+          .bpm-display {
+            font-size: 2em;
+          }
+        }
+        .record {
+          -webkit-box-flex: 1;
+        }
+
       }
-      &.stop, &.selected {
-        background : #f00;
+      &.mid {
+        width: 720px;
+        -webkit-box-pack: center;
       }
-    }
-    .label {
-      float        : left;
-      margin-right : 5px;
-      margin-left  : 5px;
-      color        : #333;
-      font-weight  : bold;
-    }
-    .frequency {
-      float: right;
-      margin-right: 10px;
-      .labelf {
-        color        : #333;
-        font-weight  : bold;
-        float: none;
-        margin-bottom: 5px;
+      &.right {
+        width: 120px;
       }
+      .pictos-button {
+        font-family: 'Pictos';
+        font-size: 3em;
+        &.pressed {
+          color: #ad0003;
+        }
+      }
+      .freq-button {
+        &.pressed {
+          color: #ad0003;
+        }
+      }
+      .waveform-button {
+        &.pressed {
+          color: #ad0003;
+        }
+      }
+
     }
   }
+
 }

@@ -5,27 +5,29 @@
  * Time: 1:15 PM
  */
 Ext.define('TNR.controller.Audio', {
-    extend              :'Ext.app.Controller',
-    config              :{
-        views       :[
+    extend         : 'Ext.app.Controller',
+    config         : {
+        views        : [
             'CanvasGrid'
         ],
-        refs        :{
-            canvasGrid:'canvasgrid'
+        refs         : {
+            canvasGrid : 'canvasgrid'
         },
-        control     :{
-            'canvasgrid':{
-                'playCell'      :'onPlayCell',
-                'startRecording':'onStartRecording',
-                'stopRecording' :'onStopRecording',
-                'resetPlayer'   :'onResetPlayer'
+        control      : {
+            'canvasgrid' : {
+                'playCell'              : 'onPlayCell',
+                'record'                : 'onRecord',
+                'resetGrid'             : 'onResetGrid',
+                'adjustBPM'             : 'onAdjustBPM',
+                'frequencyDivideChange' : 'onFrequencyDivideChange',
+                'waveformChange'        : 'onWaveformChange'
             }
         },
-        audioContext:null,
-        gainNode    :null,
-        recorder    :null
+        audioContext : null,
+        gainNode     : null,
+        recorder     : null
     },
-    init                :function () {
+    init           : function () {
         var me = this,
             audioContext = new webkitAudioContext(),
             gainNode = audioContext.createGainNode();
@@ -36,49 +38,59 @@ Ext.define('TNR.controller.Audio', {
         me.setAudioContext(audioContext);
         me.setGainNode(gainNode);
     },
-    onResetPlayer       :function () {
-       var canvas = Ext.ComponentQuery.query('canvasgrid')[0];
-        canvas.resetGrid();
+    onResetGrid    : function () {
+        this.getCanvasGrid().resetGrid();
     },
-    onPlayCell          :function (cell) {
+    onPlayCell     : function (cell) {
         this.generateTone(cell);
     },
-    generateTone        :function (e) {
-        var me = this,
-            audioContext = me.getAudioContext(),
-            oscillator = audioContext.createOscillator(),
-            fps = (me.getCanvasGrid().getBpm() / 60),
-            canvas = Ext.ComponentQuery.query('canvasgrid')[0],
-            freqD = canvas.getFrequency() ? canvas.getFrequency() : 2;
+    generateTone   : function (e) {
+        var me              = this,
+            audioContext    = me.getAudioContext(),
+            oscillator      = audioContext.createOscillator(),
+            canvasGrid      = me.getCanvasGrid(),
+            frequencyDivide = canvasGrid.getFrequencyDivide(),
+            waveformType    = canvasGrid.getWaveformType(),
+            fps;
 
         oscillator.connect(me.getGainNode()); // Connect to speakers
 
         oscillator.start(0); // Start generating sound immediately
-        oscillator.frequency.value = ((e.physicalPos.x + e.physicalPos.y) / freqD); // in hertz
+
+        oscillator.type = waveformType;
+        oscillator.frequency.value = ((e.physicalPos.x + e.physicalPos.y) / frequencyDivide); // in hertz
         function stopNote() {
+            fps = (canvasGrid.getBpm() / 60);
             setTimeout(function () {
                 requestAnimationFrame(stopNote);
                 oscillator.disconnect();
             }, 1000 / fps);
-        };
+        }
+
         stopNote();
     },
-    onStartRecording    :function () {
-        var me = this,
+    onRecord       : function () {
+        var me         = this,
+            canvasGrid = me.getCanvasGrid();
+
+        if (canvasGrid.isRecording()) {
+            me.stopRecording();
+        } else {
+            me.startRecording();
+        }
+    },
+    startRecording : function () {
+        var me       = this,
             recorder = new Recorder(me.getGainNode(), {
-                workerPath:'lib/recorderjs/recorderWorker.js'
+                workerPath : 'lib/recorderjs/recorderWorker.js'
             });
-        console.log('start recording');
+
         recorder.record();
         me.setRecorder(recorder);
-
+        me.getCanvasGrid().setRecording(true);
     },
-    onRecordAudioProcess:function (e) {
 
-//        console.log(e.inputBuffer.getChannelData(0));
-    },
-    onStopRecording     :function () {
-        console.log('stop');
+    stopRecording           : function () {
         var recorder = this.getRecorder();
 
         recorder.stop();
@@ -86,5 +98,27 @@ Ext.define('TNR.controller.Audio', {
         recorder.exportWAV(function (buffer) {
             Recorder.forceDownload(buffer);
         });
+
+        this.getCanvasGrid().setRecording(false);
+    },
+    onAdjustBPM             : function (button) {
+        var canvasGrid = this.getCanvasGrid(),
+            bpm        = canvasGrid.getBpm(),
+            offset     = button.hasCls("plus") ? 1 : -1,
+            newBPM     = bpm + offset;
+
+        canvasGrid.setBpm(newBPM);
+    },
+    onFrequencyDivideChange : function (button) {
+        var canvasGrid = this.getCanvasGrid(),
+            value      = parseInt(button.getHtml(), 10);
+
+        canvasGrid.setFrequencyDivide(value);
+    },
+    onWaveformChange        : function (button) {
+        var canvasGrid = this.getCanvasGrid(),
+            value      = parseInt(button.dom.dataset.value, 10);
+
+        canvasGrid.setWaveformType(value);
     }
 });
