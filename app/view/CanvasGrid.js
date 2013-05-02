@@ -48,6 +48,16 @@ Ext.define('TNR.view.CanvasGrid', {
                         '<div class="button waveform-button" data-eventname="waveformChange" data-value="2">Sawtooth</div>',
                         '<div class="button waveform-button" data-eventname="waveformChange" data-value="3">Triangle</div>',
                     '</div>',
+                    '<div class="filter">',
+                        '<h3>Filter Adjust</h3>',
+                        '<div class="button filter-button pressed" data-eventname="filterChange" data-value="0">LowPass</div>',
+                        '<div class="button filter-button" data-eventname="filterChange" data-value="1">HighPass</div>',
+                        '<div class="button filter-button" data-eventname="filterChange" data-value="2">BandPass</div>',
+                        '<div class="button filter-button" data-eventname="filterChange" data-value="3">LowShelf</div>',
+                        '<div class="button filter-button" data-eventname="filterChange" data-value="4">HighShelf</div>',
+                        '<div class="button filter-button" data-eventname="filterChange" data-value="5">Peaking</div>',
+                        '<div class="button filter-button" data-eventname="filterChange" data-value="6">Notch</div>',
+                        '<div class="button filter-button" data-eventname="filterChange" data-value="7">AllPass</div>',
                 '</div>',
             '</div>'
         ),
@@ -56,6 +66,7 @@ Ext.define('TNR.view.CanvasGrid', {
         cells            : null,
         frequencyDivide  : 2,
         waveformType     : 0,
+        filterType       : 0,
         recording        : null
     },
     initialize           : function () {
@@ -237,6 +248,11 @@ Ext.define('TNR.view.CanvasGrid', {
     applyWaveformType    : function (newValue) {
         var waveform = this.element.down('.waveform');
         waveform && this.setPressedInGroup(waveform, newValue, true);
+        return parseInt(newValue, 10);
+    },
+    applyFilterType    : function (newValue) {
+        var filter = this.element.down('.filter');
+        filter && this.setPressedInGroup(filter, newValue, true);
         return parseInt(newValue, 10);
     },
 

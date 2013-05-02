@@ -20,7 +20,8 @@ Ext.define('TNR.controller.Audio', {
                 'resetGrid'             : 'onResetGrid',
                 'adjustBPM'             : 'onAdjustBPM',
                 'frequencyDivideChange' : 'onFrequencyDivideChange',
-                'waveformChange'        : 'onWaveformChange'
+                'waveformChange'        : 'onWaveformChange',
+                'filterChange'          : 'onFilterChange'
             }
         },
         audioContext : null,
@@ -49,12 +50,19 @@ Ext.define('TNR.controller.Audio', {
             audioContext    = me.getAudioContext(),
             oscillator      = audioContext.createOscillator(),
             canvasGrid      = me.getCanvasGrid(),
+            gainNode        = me.getGainNode(),
             frequencyDivide = canvasGrid.getFrequencyDivide(),
             waveformType    = canvasGrid.getWaveformType(),
+            filterType      = canvasGrid.getFilterType(),
+            filter          = audioContext.createBiquadFilter(),
             fps;
 
-        oscillator.connect(me.getGainNode()); // Connect to speakers
+        oscillator.connect(gainNode); // Connect to speakers
 
+        // set up our filter
+        filter.type = filterType;
+        filter.frequency.value = 440; // arbitrary value for now
+        gainNode.connect(filter);
         oscillator.start(0); // Start generating sound immediately
 
         oscillator.type = waveformType;
@@ -120,5 +128,10 @@ Ext.define('TNR.controller.Audio', {
             value      = parseInt(button.dom.dataset.value, 10);
 
         canvasGrid.setWaveformType(value);
+    },
+    onFilterChange        : function (button) {
+        var canvasGrid = this.getCanvasGrid(),
+            value      = parseInt(button.dom.dataset.value, 10);
+        canvasGrid.setFilterType(value);
     }
 });
