@@ -52,12 +52,15 @@ Ext.define('TNR.controller.Audio', {
             audioContext    = me.getAudioContext(),
             oscillator      = audioContext.createOscillator(),
             canvasGrid      = me.getCanvasGrid(),
-            gainNode        = me.getGainNode(),
+            gainNode        = audioContext.createGainNode(),
             frequencyDivide = canvasGrid.getFrequencyDivide(),
             waveformType    = canvasGrid.getWaveformType(),
             filterType      = canvasGrid.getFilterType(),
             filter          = audioContext.createBiquadFilter(),
+            currTime        = audioContext.currentTime,
             fps;
+
+        gainNode.connect(me.getGainNode());
 
         oscillator.connect(filter); // Connect to speakers
 
@@ -65,10 +68,16 @@ Ext.define('TNR.controller.Audio', {
         filter.type = filterType;
         filter.frequency.value = 4400.0; // arbitrary value for now
         filter.connect(gainNode);
+
+        gainNode.gain.linearRampToValueAtTime(0, currTime);
+        gainNode.gain.linearRampToValueAtTime(0.5, currTime + .1);
         oscillator.start(0); // Start generating sound immediately
 
         oscillator.type = waveformType;
         oscillator.frequency.value = ((e.physicalPos.x + e.physicalPos.y) / frequencyDivide); // in hertz
+        gainNode.gain.linearRampToValueAtTime(0.5, currTime + .1);
+        gainNode.gain.linearRampToValueAtTime(0.0, currTime + .5);
+
 
         function stopNote() {
             fps = (canvasGrid.getBpm() / 60);
