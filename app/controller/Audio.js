@@ -31,10 +31,12 @@ Ext.define('TNR.controller.Audio', {
     init           : function () {
         var me = this,
             audioContext = new webkitAudioContext(),
-            gainNode = audioContext.createGainNode();
+            gainNode = audioContext.createGainNode(),
+            compressor = audioContext.createDynamicsCompressor();
 
-        gainNode.connect(audioContext.destination);
+        gainNode.connect(compressor);
         gainNode.gain.value = 0.5;
+        compressor.connect(audioContext.destination);
 
         me.setAudioContext(audioContext);
         me.setGainNode(gainNode);
@@ -67,6 +69,7 @@ Ext.define('TNR.controller.Audio', {
 
         oscillator.type = waveformType;
         oscillator.frequency.value = ((e.physicalPos.x + e.physicalPos.y) / frequencyDivide); // in hertz
+
         function stopNote() {
             fps = (canvasGrid.getBpm() / 60);
             setTimeout(function () {
