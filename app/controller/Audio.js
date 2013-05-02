@@ -57,12 +57,12 @@ Ext.define('TNR.controller.Audio', {
             filter          = audioContext.createBiquadFilter(),
             fps;
 
-        oscillator.connect(gainNode); // Connect to speakers
+        oscillator.connect(filter); // Connect to speakers
 
         // set up our filter
         filter.type = filterType;
-        filter.frequency.value = 440; // arbitrary value for now
-        gainNode.connect(filter);
+        filter.frequency.value = 4400.0; // arbitrary value for now
+        filter.connect(gainNode);
         oscillator.start(0); // Start generating sound immediately
 
         oscillator.type = waveformType;
