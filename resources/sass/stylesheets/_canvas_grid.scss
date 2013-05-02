@@ -41,24 +41,13 @@
       &.right {
         width: 120px;
       }
+      .pressed {
+        color: #ad0003;
+      }
       .pictos-button {
         font-family: 'Pictos';
         font-size: 3em;
-        &.pressed {
-          color: #ad0003;
-        }
       }
-      .freq-button {
-        &.pressed {
-          color: #ad0003;
-        }
-      }
-      .waveform-button {
-        &.pressed {
-          color: #ad0003;
-        }
-      }
-
     }
   }
 
