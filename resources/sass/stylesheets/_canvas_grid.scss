@@ -8,7 +8,7 @@
     //margin: 20px auto;
     margin-left: auto;
     margin-right: auto;
-    margin-top: 20px;
+    margin-top: 0px;
     border-radius: 2em;
     background: -webkit-radial-gradient(center, circle cover, rgba(181, 189, 200, 1) 0%, rgba(130, 140, 149, 1) 20%, rgba(40, 52, 59, 1) 100%); /* Chrome10+,Safari5.1+ */
     -webkit-box-align: stretch;
@@ -21,6 +21,7 @@
         -webkit-box-align: stretch;
         text-align: center;
         .reset {
+          margin-top: 50px;
           -webkit-box-flex: 1;
         }
         .bpm {
@@ -31,6 +32,11 @@
         }
         .record {
           -webkit-box-flex: 1;
+        }
+        .button {
+          &.pressed {
+            color: #f00;
+          }
         }
 
       }
