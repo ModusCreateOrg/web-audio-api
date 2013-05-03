@@ -47,6 +47,9 @@
       .pictos-button {
         font-family: 'Pictos';
         font-size: 3em;
+        &.pressed {
+          color: #ad0003;
+        }
       }
       .frequency {
         margin-top: 65px;
