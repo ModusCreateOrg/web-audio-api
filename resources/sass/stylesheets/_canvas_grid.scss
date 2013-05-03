@@ -33,11 +33,6 @@
         .record {
           -webkit-box-flex: 1;
         }
-        .button {
-          &.pressed {
-            color: #f00;
-          }
-        }
 
       }
       &.mid {
@@ -48,7 +43,6 @@
         width: 120px;
         padding: 0 10px 0 5px;
       }
-
 
       .pictos-button {
         font-family: 'Pictos';
@@ -68,7 +62,7 @@
       }
       h3 {
         font-size: 1.3em;
-        color:#ccc;
+        color: #ccc;
       }
       .freq-button {
         color: #fff;
