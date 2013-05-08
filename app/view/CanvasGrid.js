@@ -186,7 +186,13 @@ Ext.define('TNR.view.CanvasGrid', {
         if (shape.pressed)  {
             currentPositions.push(position);
         } else {
-            currentPositions = Ext.Array.remove(currentPositions, position);
+            currentPositions = currentPositions.filter(function(item) {
+                if (item.x == position.x && item.y == position.y) {
+                  //remove
+                } else {
+                    return item;
+                }
+            });
         }
         this.setPositions(currentPositions);
 
