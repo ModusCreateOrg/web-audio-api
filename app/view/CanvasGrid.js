@@ -171,17 +171,25 @@ Ext.define('TNR.view.CanvasGrid', {
             }
         }
         stage.update();
+        this.setPositions([]);
     },
     onCellTap            : function (e) {
         this.toggleCellPressed(e.target);
     },
     toggleCellPressed    : function (shape) {
-        var fillStyle = (shape.pressed) ? shape.defaultStyle : shape.pressedStyle;
+        var fillStyle = (shape.pressed) ? shape.defaultStyle : shape.pressedStyle,
+            position  = { x: shape.physicalPos.x, y: shape.physicalPos.y },
+            currentPositions = this.getPositions();
         shape.graphics.clear().beginFill(fillStyle).drawRoundRect(shape.physicalPos.x, shape.physicalPos.y, 35, 35, 10).endFill();
         shape.pressed = !shape.pressed;
+
         if (shape.pressed)  {
-           this.getPositions().push({x:shape.physicalPos.x, y:shape.physicalPos.y});
+            currentPositions.push(position);
+        } else {
+            currentPositions = Ext.Array.remove(currentPositions, position);
         }
+        this.setPositions(currentPositions);
+
         this.getStage().update();
     },
     startTicker          : function () {
