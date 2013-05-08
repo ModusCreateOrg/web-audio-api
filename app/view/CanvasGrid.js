@@ -58,7 +58,11 @@ Ext.define('TNR.view.CanvasGrid', {
                         '<div class="button filter-button" data-eventname="filterChange" data-value="5">Peaking</div>',
                         '<div class="button filter-button" data-eventname="filterChange" data-value="6">Notch</div>',
                         '<div class="button filter-button" data-eventname="filterChange" data-value="7">AllPass</div>',
-                '</div>',
+                    '</div>',
+                    '<div class="save">',
+                        '<h3 class="label">Save:</h3>',
+                        '<div class="button save-btn" data-eventname="saveGrid"></div>',
+                    '</div>',
             '</div>'
         ),
         bpm              : 120,

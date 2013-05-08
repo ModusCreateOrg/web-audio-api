@@ -24,14 +24,16 @@
           margin-top: 50px;
           -webkit-box-flex: 1;
         }
+
+
         .bpm {
-          -webkit-box-flex: 2;
+          -webkit-box-flex: 3;
           .bpm-display {
             font-size: 2em;
           }
         }
         .record {
-          -webkit-box-flex: 1;
+          -webkit-box-flex: 4;
         }
 
       }
@@ -63,6 +65,7 @@
       h3 {
         font-size: 1.3em;
         color: #ccc;
+        margin-bottom: 0.50em;
       }
       .freq-button {
         color: #fff;
@@ -83,6 +86,19 @@
         text-align: left;
         &.pressed {
           background: -webkit-linear-gradient(#f00, #ad0003);
+        }
+      }
+      .save {
+        margin-top       : 20px;
+        .save-btn {
+          background-image  : url('../images/saveBtn.png');
+          background-repeat : no-repeat;
+          background-size   : 100%;
+          width             : 48px;
+          height            : 48px;
+          &.pressed {
+            background: -webkit-linear-gradient(#f00, #ad0003);
+          }
         }
       }
 
