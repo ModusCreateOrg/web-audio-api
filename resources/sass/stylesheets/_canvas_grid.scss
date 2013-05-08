@@ -91,13 +91,14 @@
       .save {
         margin-top       : 20px;
         .save-btn {
+          background-color  : #ad0003;
           background-image  : url('../images/saveBtn.png');
           background-repeat : no-repeat;
           background-size   : 100%;
           width             : 48px;
           height            : 48px;
           &.pressed {
-            background: -webkit-linear-gradient(#f00, #ad0003);
+            background-color: #123;
           }
         }
       }

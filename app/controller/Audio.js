@@ -21,7 +21,8 @@ Ext.define('TNR.controller.Audio', {
                 'adjustBPM'             : 'onAdjustBPM',
                 'frequencyDivideChange' : 'onFrequencyDivideChange',
                 'waveformChange'        : 'onWaveformChange',
-                'filterChange'          : 'onFilterChange'
+                'filterChange'          : 'onFilterChange',
+                'saveGrid'              : 'onSaveGrid'
             }
         },
         audioContext : null,
@@ -40,6 +41,23 @@ Ext.define('TNR.controller.Audio', {
 
         me.setAudioContext(audioContext);
         me.setGainNode(gainNode);
+    },
+    onSaveGrid     : function() {
+        var canvasGrid = this.getCanvasGrid(),
+            hashSong = canvasGrid.getPositions(),
+            songObject;
+        if (hashSong && hashSong.length > 0) {
+            Ext.Msg.prompt('Save Song', 'Please enter a name for it:', function(btn, value) {
+                if (btn == 'ok') {
+                    hashSong = Ext.encode(hashSong);
+                    songObject = Ext.create('TNR.model.Song', {name: value, hashSong: hashSong});
+                    songObject.save();
+                }
+            });
+        } else {
+            Ext.Msg.alert("Save Error", "There is no song created yet. Tap on the grid to create a song");
+        }
+
     },
     onResetGrid    : function () {
         this.getCanvasGrid().resetGrid();

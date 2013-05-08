@@ -71,7 +71,8 @@ Ext.define('TNR.view.CanvasGrid', {
         frequencyDivide  : 2,
         waveformType     : 0,
         filterType       : 0,
-        recording        : null
+        recording        : null,
+        positions        : []
     },
     initialize           : function () {
         var me = this;
@@ -178,6 +179,9 @@ Ext.define('TNR.view.CanvasGrid', {
         var fillStyle = (shape.pressed) ? shape.defaultStyle : shape.pressedStyle;
         shape.graphics.clear().beginFill(fillStyle).drawRoundRect(shape.physicalPos.x, shape.physicalPos.y, 35, 35, 10).endFill();
         shape.pressed = !shape.pressed;
+        if (shape.pressed)  {
+           this.getPositions().push({x:shape.physicalPos.x, y:shape.physicalPos.y});
+        }
         this.getStage().update();
     },
     startTicker          : function () {
