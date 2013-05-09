@@ -1,6 +1,6 @@
 Ext.define('TNR.view.SongsPanel', {
-    extend  :'Ext.Panel',
-    xtype   :'songspanel',
+    extend:'Ext.Panel',
+    xtype :'songspanel',
 
     requires:[
         'Ext.Toolbar',
@@ -13,27 +13,38 @@ Ext.define('TNR.view.SongsPanel', {
         centered:true,
         width   :400,
         hidden  :true,
-        title: 'MY LIST',
-
-        items   :[
+        items:[
 
             {
-                xtype:'container',
-                dockedItems: [
+                xtype      :'container',
+                dockedItems:[
                     {
-                        xtype: 'button',
-                        ui   : 'back',
-                        width: 120,
-                        text : 'CLOSE',
-                        bubbleEvents: ['closeSongsPanel'],
-                        handler: function() {
-                            this.fireEvent('closeSongsPanel');
-                        }
+                        xtype :'toolbar',
+                        ui    :'light',
+                        docked:'top',
+                        layout:'hbox',
+                        title: 'MY SONG LIST',
+                        items :[
+                            {
+                                xtype       :'button',
+                                cls         : 'close-btn',
+                                ui          :'back',
+                                width       : 100,
+                                text        :'CLOSE',
+                                docked      :'left',
+                                bubbleEvents:['closeSongsPanel'],
+                                handler     :function () {
+                                    this.fireEvent('closeSongsPanel');
+                                }
+                            }
+                        ]
                     }
+
                 ],
-                items: [
+                items      :[
                     {
-                        xtype: 'songlist'
+                        xtype :'songlist',
+                        height:450
                     }
                 ]
 
