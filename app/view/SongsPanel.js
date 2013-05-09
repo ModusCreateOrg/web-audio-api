@@ -1,8 +1,10 @@
 Ext.define('TNR.view.SongsPanel', {
-    extend  :'Ext.Sheet',
+    extend  :'Ext.Panel',
     xtype   :'songspanel',
+
     requires:[
-        'Ext.Toolbar'
+        'Ext.Toolbar',
+        'TNR.view.SongList'
     ],
 
     config:{
@@ -11,12 +13,13 @@ Ext.define('TNR.view.SongsPanel', {
         centered:true,
         width   :400,
         hidden  :true,
+        title: 'MY LIST',
+
         items   :[
+
             {
-                xtype :'toolbar',
-                cls   : 'list-modal-toolbar',
-                docked:'top',
-                items: [
+                xtype:'container',
+                dockedItems: [
                     {
                         xtype: 'button',
                         ui   : 'back',
@@ -27,10 +30,13 @@ Ext.define('TNR.view.SongsPanel', {
                             this.fireEvent('closeSongsPanel');
                         }
                     }
+                ],
+                items: [
+                    {
+                        xtype: 'songlist'
+                    }
                 ]
-            },
-            {
-                xtype:'songlist'
+
             }
 
         ]
@@ -44,5 +50,4 @@ Ext.define('TNR.view.SongsPanel', {
             return this.callParent();
         }
     }
-
 });
