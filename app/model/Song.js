@@ -7,10 +7,10 @@
 Ext.define('TNR.model.Song', {
     extend :'Ext.data.Model',
     config :{
-        /*identifier: {
+        identifier: {
             type: 'uuid'
-        },*/
-        identifier : 'sequential',
+        },
+        //identifier : 'sequential',
         fields:[
             { name:'id', type:'int' },
             { name:'name', type:'string' },

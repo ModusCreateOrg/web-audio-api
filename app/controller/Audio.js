@@ -8,10 +8,14 @@ Ext.define('TNR.controller.Audio', {
     extend         : 'Ext.app.Controller',
     config         : {
         views        : [
-            'CanvasGrid'
+            'CanvasGrid',
+            'SongList',
+            'SongsPanel'
         ],
         refs         : {
-            canvasGrid : 'canvasgrid'
+            canvasGrid : 'canvasgrid',
+            songList   : 'songlist',
+            songsPanel   : 'songspanel'
         },
         control      : {
             'canvasgrid' : {
@@ -22,7 +26,14 @@ Ext.define('TNR.controller.Audio', {
                 'frequencyDivideChange' : 'onFrequencyDivideChange',
                 'waveformChange'        : 'onWaveformChange',
                 'filterChange'          : 'onFilterChange',
-                'saveGrid'              : 'onSaveGrid'
+                'saveGrid'              : 'onSaveGrid',
+                'listSongs'             : 'onListSongs'
+            },
+            'songspanel': {
+                'closeSongsPanel' : 'onCloseSongsPanel'
+            },
+            'songlist': {
+                'renderSong' : 'onRenderSong'
             }
         },
         audioContext : null,
@@ -59,6 +70,17 @@ Ext.define('TNR.controller.Audio', {
         } else {
             Ext.Msg.alert("Save Error", "There is no song created yet. Tap on the grid to create a song");
         }
+
+    },
+    onListSongs: function() {
+       var songPanel = this.getSongsPanel();
+       songPanel.show();
+    },
+    onCloseSongsPanel: function() {
+        var songPanel = this.getSongsPanel();
+        songPanel.hide();
+    },
+    onRenderSong: function() {
 
     },
     onResetGrid    : function () {

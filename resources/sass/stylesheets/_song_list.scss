@@ -1,0 +1,10 @@
+.song-list {
+  .song-list-item {
+
+    &.x-item-selected {
+      h3 {
+        color : #fff;
+      }
+    }
+  }
+}

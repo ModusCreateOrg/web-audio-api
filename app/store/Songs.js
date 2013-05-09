@@ -1,8 +1,8 @@
 /**
- * Song
+ * Songs Store
  * @author: Alex Lazar
- * @extends Ext.Model
- * It is used to define the Song model
+ * @extends Ext.data.Store
+ * It is used to define the Songs Store which has a proxy to the local-storage
  */
 Ext.define('TNR.store.Songs', {
     extend  :'Ext.data.Store',
@@ -13,6 +13,7 @@ Ext.define('TNR.store.Songs', {
         proxy  :{
             type:'localstorage',
             id  :'wb-songs'
-        }
+        },
+        autoLoad:true
     }
 });
