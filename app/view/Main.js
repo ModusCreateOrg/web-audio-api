@@ -6,9 +6,12 @@ Ext.define('TNR.view.Main', {
     config   : {
         items  : [
             {
-                xtype : 'canvasgrid',
-                title : 'Sound Grid'
+                xtype : 'canvasgrid'
+            },
+            {
+                xtype: 'songspanel'
             }
         ]
     }
 });
+Ext.MessageBox

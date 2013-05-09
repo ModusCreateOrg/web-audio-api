@@ -1,25 +1,48 @@
 Ext.define('TNR.view.SongsPanel', {
-    extend   : 'Ext.Panel',
-    xtype    : 'songspanel',
+    extend  :'Ext.Sheet',
+    xtype   :'songspanel',
+    requires:[
+        'Ext.Toolbar'
+    ],
 
-    config   : {
-        modal: true,
-        showAnimation: {type: 'slide', duration: 500, direction: 'up'},
-        hideAnimation: {type: 'slide', duration: 500, direction: 'down'},
-        width: 300,
-        dockedItems: [
+    config:{
+        cls     :'list-modal',
+        modal   :true,
+        centered:true,
+        width   :400,
+        hidden  :true,
+        items   :[
             {
-                xtype: 'button',
-                text: 'Close',
-                handler: function() {
-                    this.fireEvent('closeSongsPanel');
-                }
-            }
-        ],
-        items  : [
+                xtype :'toolbar',
+                cls   : 'list-modal-toolbar',
+                docked:'top',
+                items: [
+                    {
+                        xtype: 'button',
+                        ui   : 'back',
+                        width: 120,
+                        text : 'CLOSE',
+                        bubbleEvents: ['closeSongsPanel'],
+                        handler: function() {
+                            this.fireEvent('closeSongsPanel');
+                        }
+                    }
+                ]
+            },
             {
-                xtype : 'songlist'
+                xtype:'songlist'
             }
+
         ]
+    },
+    show  :function (initialConfig) {
+        if (!this.getParent() && Ext.Viewport) {
+            Ext.Viewport.add(this);
+        }
+
+        if (!initialConfig) {
+            return this.callParent();
+        }
     }
+
 });
