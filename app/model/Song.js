@@ -5,16 +5,16 @@
  * It is used to define the Song model
  */
 Ext.define('TNR.model.Song', {
-    extend:'Ext.data.Model',
-    config:{
+    extend :'Ext.data.Model',
+    config :{
+        /*identifier: {
+            type: 'uuid'
+        },*/
+        identifier : 'sequential',
         fields:[
-            { name: 'id', type: 'string' },
-            { name: 'name', type: 'string' },
-            { name: 'hashSong', type: 'string' }
-        ],
-        proxy :{
-            type:'localstorage',
-            id  :'wb-songs'
-        }
+            { name:'id', type:'int' },
+            { name:'name', type:'string' },
+            { name:'hashSong', type:'string' }
+        ]
     }
 });

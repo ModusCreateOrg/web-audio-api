@@ -45,13 +45,15 @@ Ext.define('TNR.controller.Audio', {
     onSaveGrid     : function() {
         var canvasGrid = this.getCanvasGrid(),
             hashSong = canvasGrid.getPositions(),
-            songObject;
+            songObject,
+            songsStore = Ext.getStore("Songs");
         if (hashSong && hashSong.length > 0) {
             Ext.Msg.prompt('Save Song', 'Please enter a name for it:', function(btn, value) {
                 if (btn == 'ok') {
                     hashSong = Ext.encode(hashSong);
                     songObject = Ext.create('TNR.model.Song', {name: value, hashSong: hashSong});
-                    songObject.save();
+                    songsStore.add(songObject);
+                    songsStore.sync();
                 }
             });
         } else {

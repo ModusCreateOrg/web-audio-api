@@ -34,6 +34,9 @@ Ext.application({
     models: [
         'Song'
     ],
+    stores: [
+        'Songs'
+    ],
 
     views : [
         'Main'
