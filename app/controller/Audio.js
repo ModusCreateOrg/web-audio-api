@@ -68,7 +68,7 @@ Ext.define('TNR.controller.Audio', {
                 }
             });
         } else {
-            Ext.Msg.alert("Save Error", "There is no song created yet. Tap on the grid to create a song");
+            Ext.Msg.alert("Error Saving", "There is no song created yet. Tap on the grid to create a song");
         }
 
     },
@@ -81,7 +81,6 @@ Ext.define('TNR.controller.Audio', {
         songPanel.hide();
     },
     onRenderSong: function(item) {
-
         var data = item ? item.data : null,
             hashSong = data.hashSong ? Ext.decode(data.hashSong) : null;
         if (hashSong && hashSong.length > 0) {
