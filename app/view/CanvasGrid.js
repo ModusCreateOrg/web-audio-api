@@ -180,6 +180,42 @@ Ext.define('TNR.view.CanvasGrid', {
         stage.update();
         this.setPositions([]);
     },
+    /**
+     * @hash Array of Objects
+     * Used to render the hash data into the grid using the hash coordinates to position elements that are selected
+     * */
+    renderData            : function (hash) {
+        var stage        = this.getStage(),
+            shapes       = stage.children,
+            shapesLength = shapes.length,
+            shape,
+            i = 0,
+            x, y,
+            fillStyle;
+        console.log('item = ', hash);
+        for (; i < shapesLength; i++) {
+            shape = shapes[i];
+            if (shape.physicalPos) {
+                x = shape.physicalPos.x;
+                y = shape.physicalPos.y;
+                if ( hash.filter(function(el) {
+                         if (el.x == x && el.y == y) {
+                             return el;
+                         }
+                     }).length > 0
+                   ) {
+                    shape.pressed = true;
+                    fillStyle = shape.pressedStyle;
+                } else {
+                    shape.pressed = false;
+                    fillStyle = shape.defaultStyle;
+                }
+                shape.graphics.clear().beginFill(fillStyle).drawRoundRect(x, y, 35, 35, 10).endFill();
+            }
+        }
+        stage.update();
+        this.setPositions(hash);
+    },
     onCellTap            : function (e) {
         this.toggleCellPressed(e.target);
     },

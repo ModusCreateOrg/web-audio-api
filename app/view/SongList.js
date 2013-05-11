@@ -15,8 +15,9 @@ Ext.define('TNR.view.SongList', {
         emptyText       : '<div class="empty">No song added yet. Create your song and save it</div>',
         itemTpl          :'<h3>{name}</h3>',
         itemCls         :'song-list-item',
-        onItemDisclosure: function() {
-            alert('render song - not ready yet');
+        onItemDisclosure: function(item) {
+
+            this.fireEvent('renderSong', item);
         }
     }
 });

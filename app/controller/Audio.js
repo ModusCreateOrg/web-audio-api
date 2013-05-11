@@ -80,8 +80,14 @@ Ext.define('TNR.controller.Audio', {
         var songPanel = this.getSongsPanel();
         songPanel.hide();
     },
-    onRenderSong: function() {
+    onRenderSong: function(item) {
 
+        var data = item ? item.data : null,
+            hashSong = data.hashSong ? Ext.decode(data.hashSong) : null;
+        if (hashSong && hashSong.length > 0) {
+           this.getCanvasGrid().renderData(hashSong);
+        }
+        this.getSongsPanel().hide();
     },
     onResetGrid    : function () {
         this.getCanvasGrid().resetGrid();
