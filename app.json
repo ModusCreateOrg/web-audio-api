@@ -44,16 +44,13 @@
             "x-bootstrap": true
         },
         {
-            'path' : 'lib/easeljs/easeljs-0.6.0.min.js',
-            'remote' : true
+            'path' : 'lib/easeljs/easeljs-0.6.0.min.js'
         },
         {
-            'path' : 'lib/recorderjs/recorder.js',
-            'remote' : true
+            'path' : 'lib/recorderjs/recorder.js'
         },
         {
-            'path' : 'lib/recorderjs/recorderWorker.js',
-            'remote' : true
+            'path' : 'lib/recorderjs/recorderWorker.js'
         },
         {
             "path": "app.js",
