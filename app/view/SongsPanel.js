@@ -22,39 +22,35 @@ Ext.define('TNR.view.SongsPanel', {
         items    : [
 
             {
-                xtype  : 'container',
-                config : {
-                    dockedItems : [
-                        {
-                            xtype  : 'toolbar',
-                            ui     : 'light',
-                            docked : 'top',
-                            layout : 'hbox',
-                            title  : 'MY SONG LIST',
-                            items  : [
-                                {
-                                    xtype        : 'button',
-                                    cls          : 'close-btn',
-                                    ui           : 'back',
-                                    width        : 100,
-                                    text         : 'CLOSE',
-                                    docked       : 'left',
-                                    bubbleEvents : ['closeSongsPanel'],
-                                    handler      : function () {
-                                        this.fireEvent('closeSongsPanel');
-                                    }
-                                }
-                            ]
-                        }
+                xtype       : 'container',
 
-                    ],
-                    items       : [
-                        {
-                            xtype  : 'songlist',
-                            height : 450
-                        }
-                    ]
-                }
+                items       : [
+                    {
+                        xtype  : 'toolbar',
+                        ui     : 'light',
+                        docked : 'top',
+                        layout : 'hbox',
+                        title  : 'MY SONG LIST',
+                        items  : [
+                            {
+                                xtype        : 'button',
+                                cls          : 'close-btn',
+                                ui           : 'back',
+                                width        : 100,
+                                text         : 'CLOSE',
+                                docked       : 'left',
+                                bubbleEvents : ['closeSongsPanel'],
+                                handler      : function () {
+                                    this.fireEvent('closeSongsPanel');
+                                }
+                            }
+                        ]
+                    },
+                    {
+                        xtype  : 'songlist',
+                        height : 450
+                    }
+                ]
 
 
             }
