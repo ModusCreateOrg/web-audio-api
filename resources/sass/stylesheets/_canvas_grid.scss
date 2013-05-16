@@ -1,5 +1,4 @@
 .canvas-grid {
-
   .outer {
 
     display: -webkit-box;
@@ -24,14 +23,16 @@
           margin-top: 50px;
           -webkit-box-flex: 1;
         }
+
+
         .bpm {
-          -webkit-box-flex: 2;
+          -webkit-box-flex: 3;
           .bpm-display {
             font-size: 2em;
           }
         }
         .record {
-          -webkit-box-flex: 1;
+          -webkit-box-flex: 4;
         }
 
       }
@@ -63,6 +64,7 @@
       h3 {
         font-size: 1.3em;
         color: #ccc;
+        margin-bottom: 0.50em;
       }
       .freq-button {
         color: #fff;
@@ -83,6 +85,38 @@
         text-align: left;
         &.pressed {
           background: -webkit-linear-gradient(#f00, #ad0003);
+        }
+      }
+      .song-actions {
+        margin-top : 20px;
+        .save, .list {
+          float: left;
+          width      : 50px;
+          .save-btn {
+            background-color  : #ad0003;
+            background-image  : url('../images/saveBtn.png');
+            background-repeat : no-repeat;
+            background-size   : 100%;
+            width             : 48px;
+            height            : 48px;
+            &.pressed {
+              background-color : #123;
+            }
+          }
+          .list-btn {
+            background-color  : #ad0003;
+            background-image  : url('../images/listBtn.png');
+            background-repeat : no-repeat;
+            background-size   : 100%;
+            width             : 48px;
+            height            : 48px;
+            &.pressed {
+              background-color : #fff;
+            }
+          }
+        }
+        .list {
+          margin-left: 5px;
         }
       }
 

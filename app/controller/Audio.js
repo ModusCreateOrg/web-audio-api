@@ -8,10 +8,14 @@ Ext.define('TNR.controller.Audio', {
     extend         : 'Ext.app.Controller',
     config         : {
         views        : [
-            'CanvasGrid'
+            'CanvasGrid',
+            'SongList',
+            'SongsPanel'
         ],
         refs         : {
-            canvasGrid : 'canvasgrid'
+            canvasGrid : 'canvasgrid',
+            songList   : 'songlist',
+            songsPanel   : 'songspanel'
         },
         control      : {
             'canvasgrid' : {
@@ -21,7 +25,15 @@ Ext.define('TNR.controller.Audio', {
                 'adjustBPM'             : 'onAdjustBPM',
                 'frequencyDivideChange' : 'onFrequencyDivideChange',
                 'waveformChange'        : 'onWaveformChange',
-                'filterChange'          : 'onFilterChange'
+                'filterChange'          : 'onFilterChange',
+                'saveGrid'              : 'onSaveGrid',
+                'listSongs'             : 'onListSongs'
+            },
+            'songspanel': {
+                'closeSongsPanel' : 'onCloseSongsPanel'
+            },
+            'songlist': {
+                'renderSong' : 'onRenderSong'
             }
         },
         audioContext : null,
@@ -40,6 +52,41 @@ Ext.define('TNR.controller.Audio', {
 
         me.setAudioContext(audioContext);
         me.setGainNode(gainNode);
+    },
+    onSaveGrid     : function() {
+        var canvasGrid = this.getCanvasGrid(),
+            hashSong = canvasGrid.getPositions(),
+            songObject,
+            songsStore = Ext.getStore("Songs");
+        if (hashSong && hashSong.length > 0) {
+            Ext.Msg.prompt('Save Song', 'Please enter a name for it:', function(btn, value) {
+                if (btn == 'ok') {
+                    hashSong = Ext.encode(hashSong);
+                    songObject = Ext.create('TNR.model.Song', {name: value, hashSong: hashSong});
+                    songsStore.add(songObject);
+                    songsStore.sync();
+                }
+            });
+        } else {
+            Ext.Msg.alert("Error Saving", "There is no song created yet. Tap on the grid to create a song");
+        }
+
+    },
+    onListSongs: function() {
+       var songPanel = this.getSongsPanel();
+       songPanel.show();
+    },
+    onCloseSongsPanel: function() {
+        var songPanel = this.getSongsPanel();
+        songPanel.hide();
+    },
+    onRenderSong: function(item) {
+        var data = item ? item.data : null,
+            hashSong = data.hashSong ? Ext.decode(data.hashSong) : null;
+        if (hashSong && hashSong.length > 0) {
+           this.getCanvasGrid().renderData(hashSong);
+        }
+        this.getSongsPanel().hide();
     },
     onResetGrid    : function () {
         this.getCanvasGrid().resetGrid();

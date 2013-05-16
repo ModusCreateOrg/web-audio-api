@@ -31,6 +31,12 @@ Ext.application({
         'Main',
         'Audio'
     ],
+    models: [
+        'Song'
+    ],
+    stores: [
+        'Songs'
+    ],
 
     views : [
         'Main'

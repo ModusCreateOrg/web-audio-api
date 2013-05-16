@@ -58,7 +58,18 @@ Ext.define('TNR.view.CanvasGrid', {
                         '<div class="button filter-button" data-eventname="filterChange" data-value="5">Peaking</div>',
                         '<div class="button filter-button" data-eventname="filterChange" data-value="6">Notch</div>',
                         '<div class="button filter-button" data-eventname="filterChange" data-value="7">AllPass</div>',
-                '</div>',
+                    '</div>',
+                    '<div class="song-actions">',
+                        '<div class="save">',
+                            '<h3 class="label">Save:</h3>',
+                            '<div class="button save-btn" data-eventname="saveGrid"></div>',
+                        '</div>',
+                        '<div class="list">',
+                            '<h3 class="label">List:</h3>',
+                            '<div class="button list-btn" data-eventname="listSongs"></div>',
+                        '</div>',
+                        '<div class="clear"></div>',
+                    '</div>',
             '</div>'
         ),
         bpm              : 120,
@@ -67,7 +78,8 @@ Ext.define('TNR.view.CanvasGrid', {
         frequencyDivide  : 2,
         waveformType     : 0,
         filterType       : 0,
-        recording        : null
+        recording        : null,
+        positions        : []
     },
     initialize           : function () {
         var me = this;
@@ -166,14 +178,67 @@ Ext.define('TNR.view.CanvasGrid', {
             }
         }
         stage.update();
+        this.setPositions([]);
+    },
+    /**
+     * @hash Array of Objects
+     * Used to render the hash data into the grid using the hash coordinates to position elements that are selected
+     * */
+    renderData            : function (hash) {
+        var stage        = this.getStage(),
+            shapes       = stage.children,
+            shapesLength = shapes.length,
+            shape,
+            i = 0,
+            x, y,
+            fillStyle;
+        console.log('item = ', hash);
+        for (; i < shapesLength; i++) {
+            shape = shapes[i];
+            if (shape.physicalPos) {
+                x = shape.physicalPos.x;
+                y = shape.physicalPos.y;
+                if ( hash.filter(function(el) {
+                         if (el.x == x && el.y == y) {
+                             return el;
+                         }
+                     }).length > 0
+                   ) {
+                    shape.pressed = true;
+                    fillStyle = shape.pressedStyle;
+                } else {
+                    shape.pressed = false;
+                    fillStyle = shape.defaultStyle;
+                }
+                shape.graphics.clear().beginFill(fillStyle).drawRoundRect(x, y, 35, 35, 10).endFill();
+            }
+        }
+        stage.update();
+        this.setPositions(hash);
     },
     onCellTap            : function (e) {
         this.toggleCellPressed(e.target);
     },
     toggleCellPressed    : function (shape) {
-        var fillStyle = (shape.pressed) ? shape.defaultStyle : shape.pressedStyle;
+        var fillStyle = (shape.pressed) ? shape.defaultStyle : shape.pressedStyle,
+            position  = { x: shape.physicalPos.x, y: shape.physicalPos.y },
+            currentPositions = this.getPositions();
         shape.graphics.clear().beginFill(fillStyle).drawRoundRect(shape.physicalPos.x, shape.physicalPos.y, 35, 35, 10).endFill();
         shape.pressed = !shape.pressed;
+
+        if (shape.pressed)  {
+            currentPositions.push(position);
+        } else {
+            currentPositions = currentPositions.filter(function(item) {
+                if (item.x == position.x && item.y == position.y) {
+                  //remove
+                } else {
+                    return item;
+                }
+            });
+        }
+        this.setPositions(currentPositions);
+
         this.getStage().update();
     },
     startTicker          : function () {

@@ -1,0 +1,17 @@
+.close-btn {
+  .x-button-label {
+    font-size   : .8em !important;
+    line-height : 2.1em !important;
+  }
+}
+
+.song-list {
+  .song-list-item {
+
+    &.x-item-selected {
+      h3 {
+        color : #fff;
+      }
+    }
+  }
+}
