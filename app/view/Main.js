@@ -14,4 +14,3 @@ Ext.define('TNR.view.Main', {
         ]
     }
 });
-Ext.MessageBox
