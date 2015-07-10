@@ -42,8 +42,8 @@ Ext.define('TNR.controller.Audio', {
     },
     init           : function () {
         var me = this,
-            audioContext = new webkitAudioContext(),
-            gainNode = audioContext.createGainNode(),
+            audioContext = new AudioContext(),
+            gainNode = audioContext.createGain(),
             compressor = audioContext.createDynamicsCompressor();
 
         gainNode.connect(compressor);
@@ -99,7 +99,7 @@ Ext.define('TNR.controller.Audio', {
             audioContext    = me.getAudioContext(),
             oscillator      = audioContext.createOscillator(),
             canvasGrid      = me.getCanvasGrid(),
-            gainNode        = audioContext.createGainNode(),
+            gainNode        = audioContext.createGain(),
             frequencyDivide = canvasGrid.getFrequencyDivide(),
             waveformType    = canvasGrid.getWaveformType(),
             filterType      = canvasGrid.getFilterType(),
